@@ -1,45 +1,17 @@
-import { Global, Module } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
-const UuidProvider = {
-  provide: 'UUID',
-  useValue: uuid,
-};
-const RandomProvider = {
-  provide: 'RANDOM',
-  useFactory: (uuid) => {
-    if (new Date().getMilliseconds() % 2 == 0) {
-      return uuid;
-    }
-    return undefined;
-  },
-  inject: ['UUID'],
-};
-class FirstService {
-  constructor(private uniqueId: string = ' default') {}
-  sayHello() {
-    console.log('hello :)' + this.uniqueId);
-  }
-}
-const ExampleFactoryProvider = {
-  provide: 'FACTORY_EXAMPLE_PROVIDER',
-  useFactory: (randomProvider?) => {
-    if (randomProvider) {
-      return new FirstService(randomProvider());
-    }
-    return new FirstService();
-    //provide something
-  },
-  inject: [{ token: 'RANDOM', optional: true }],
-};
+import { Global, Module } from "@nestjs/common";
+import { v4 as uuidv4} from 'uuid';
 
+const V4UUID =  {
+  provide: 'UUID',
+  useValue: uuidv4
+}
 @Global()
 @Module({
   providers: [
-    UuidProvider,
-    RandomProvider,
-    ExampleFactoryProvider,
-    FirstService,
+    V4UUID
   ],
-  exports: [UuidProvider, ExampleFactoryProvider],
+  exports: [
+    V4UUID
+  ]
 })
 export class CommonModule {}

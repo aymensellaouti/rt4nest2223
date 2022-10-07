@@ -1,14 +1,16 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Put } from "@nestjs/common";
 import { Get, Post, Body } from '@nestjs/common/decorators';
 import { Observable } from 'rxjs';
 import { map, throttleTime } from 'rxjs/operators';
-import { FreezePipe } from '../pipes/freeze.pipe';
+import { LoggerService } from "../services/logger.service";
 
 @Controller('test')
 export class TestController {
   observable = new Observable<number>((observer) => {
     observer.next(3);
   });
+  constructor(private loggerService: LoggerService) {
+  }
 
   @Get('')
   test() {
@@ -17,10 +19,10 @@ export class TestController {
       throttleTime(25),
     );
   }
-  @Post('')
-  testFreeze(@Body(FreezePipe) data: any) {
-    /* data.newStaff = 'cc'; */
-    console.log('test freeze', data);
-    return data;
+  @Post('add')
+  addStudent() {
+    this.loggerService.logger('add Student');
   }
+  @Put()
+  updateStudent() {}
 }

@@ -2,12 +2,12 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
+  HttpStatus, Inject,
   NotFoundException,
   Param,
   Post,
-  Query,
-} from '@nestjs/common';
+  Query
+} from "@nestjs/common";
 import {
   DefaultValuePipe,
   ParseArrayPipe,
@@ -16,16 +16,24 @@ import {
 import { Logger } from '@nestjs/common/services';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
-import { FusionStringArrayPipe } from '../pipes/fusion-string-array.pipe';
+import { LoggerService } from "../services/logger.service";
+import { SayHelloService } from "../services/say-hello/say-hello.service";
 @Controller('')
 export class FirstController {
   names: string[] = [];
+  @Inject('UUID') uuid;
+  constructor(private logger: LoggerService, private sayHelloService: SayHelloService) {}
+  @Get('service')
+  logMessage() {
+    this.sayHelloService.hello();
+    this.logger.logger('cc from First Controller');
+    return 'First Controller'+this.uuid();
+  }
+
   @Post('testpipe')
   testPipe(
     @Body(
       'skills',
-      new ParseArrayPipe({ items: String }),
-      FusionStringArrayPipe,
     )
     body,
   ) {
