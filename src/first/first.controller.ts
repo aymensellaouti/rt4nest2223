@@ -18,11 +18,20 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { LoggerService } from "../services/logger.service";
 import { SayHelloService } from "../services/say-hello/say-hello.service";
+import { FirstService } from "./first.service";
 @Controller('')
 export class FirstController {
   names: string[] = [];
+  constructor( private firstService: FirstService,
+               private logger: LoggerService, private sayHelloService: SayHelloService
+  ) {}
+  @Get('qb')
+  getQb() {
+    console.log('cc');
+    return this.firstService.findAll();
+  }
   @Inject('UUID') uuid;
-  constructor(private logger: LoggerService, private sayHelloService: SayHelloService) {}
+
   @Get('service')
   logMessage() {
     this.sayHelloService.hello();

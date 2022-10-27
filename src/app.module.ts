@@ -17,7 +17,8 @@ import { FirstEntity } from "./first/entity/first.entity";
       username: "root",
       password: "",
       database: "rt42223",
-      entities: [FirstEntity],
+      autoLoadEntities: true,
+      // entities: [FirstEntity],
       synchronize: true,
       logging: true,
     })
